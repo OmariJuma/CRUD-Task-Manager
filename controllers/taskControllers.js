@@ -1,20 +1,30 @@
+const TaskModel = require("../models/models");
 const getAllTasks = async (req, res) => {
-  res.send("all items");
+  const Products = await TaskModel.find({});
+  res.json(Products);
 };
 
 const createTask = async (req, res) => {
-  res.send("create task");
+  const { name, completed } = req.body;
+  const product = await TaskModel.create({ name, completed });
+  res.json(product);
 };
 
 const updateTask = async (req, res) => {
-  res.send("update task");
+  const { _id } = req.body;
+  const update = await TaskModel.updateOne({ _id });
+  res.json(update);
 };
 
 const deleteTask = async (req, res) => {
-  res.send("delete task");
+  const { _id } = req.body;
+  await TaskModel.deleteOne({ _id });
+  res.json({ msg: "Item has been deleted" });
 };
 const getOneTask = async (req, res) => {
-  res.send("get one task");
+  const { _id } = req.body;
+  const oneTask = await TaskModel.findById({ _id });
+  res.json(oneTask);
 };
 module.exports = {
   getAllTasks,
