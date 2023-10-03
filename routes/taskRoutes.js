@@ -8,6 +8,6 @@ const {
 const router = require("express").Router();
 
 router.route("/").get(getAllTasks).post(createTask);
-router.route("/:id").get(getOneTask).patch(updateTask).delete(deleteTask);
+router.route("/:_id").get(getOneTask).patch(updateTask).delete(deleteTask);
 
 module.exports = router;
