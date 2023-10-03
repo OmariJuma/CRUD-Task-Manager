@@ -1,39 +1,32 @@
 const TaskModel = require("../models/models");
+const asyncWrapper = require("../middlewares/asyncWrapper");
 const getAllTasks = async (req, res) => {
   const Products = await TaskModel.find({});
   res.json(Products);
 };
 
-const createTask = async (req, res) => {
-  try {
-    const { name, completed } = req.body;
-    const product = await TaskModel.create({ name, completed });
-    res.json(product);
-  } catch (error) {
-    return res.status(500).json({ msg: error });
-  }
-};
+const createTask = asyncWrapper(async (req, res) => {
+  const { name, completed } = req.body;
+  const product = await TaskModel.create({ name, completed });
+  res.json(product);
+});
 
-const updateTask = async (req, res) => {
-  try {
-    const { _id } = req.params;
-    const { name, completed } = req.body;
-    const update = await TaskModel.findByIdAndUpdate(
-      { _id },
-      { name, completed },
-      {
-        runValidators: true,
-        new: true,
-      }
-    );
-    if (!update) {
-      return res.status(404).json({ msg: `No task with id ${_id}` });
+const updateTask = asyncWrapper(async (req, res) => {
+  const { _id } = req.params;
+  const { name, completed } = req.body;
+  const update = await TaskModel.findByIdAndUpdate(
+    { _id },
+    { name, completed },
+    {
+      runValidators: true,
+      new: true,
     }
-    res.json(update);
-  } catch (error) {
-    return res.status(500).json({ msg: error });
+  );
+  if (!update) {
+    return res.status(404).json({ msg: `No task with id ${_id}` });
   }
-};
+  res.json(update);
+});
 
 const deleteTask = async (req, res) => {
   try {
